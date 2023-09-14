@@ -1,13 +1,28 @@
+// import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import Home from './Components/Content/Home'
+import ProductDetail from './Components/Content/ProductDetail';
+import Blog from './Components/Content/Blog';
+import BlogDetail from './Components/Content/BogDetail';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Router>
+      <App>
+        <Routes>
+            <Route index path='/' element={<Home/>}/>
+            <Route path='/productdetail' element={<ProductDetail/>}/>
+            <Route path='/blog'  element={<Blog/>} />
+            <Route path='/blogdetail' element={<BlogDetail/>}/>
+        </Routes>
+      </App>
+    </Router>
   </React.StrictMode>
 );
 
