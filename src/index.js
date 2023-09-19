@@ -7,8 +7,12 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Home from './Components/Content/Home'
 import ProductDetail from './Components/Content/ProductDetail';
-import Blog from './Components/Content/Blog';
-import BlogDetail from './Components/Content/BogDetail';
+import Blog from './Components/Content/Blog/Blog';
+import BlogDetail from './Components/Content/Blog/BogDetail';
+import Register from './Components/Content/Member/Register';
+import Login from './Components/Content/Member/Login';
+import Index from './Components/Content/Member';
+import Account from './Components/Content/Member/Account';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -19,7 +23,12 @@ root.render(
             <Route index path='/' element={<Home/>}/>
             <Route path='/productdetail' element={<ProductDetail/>}/>
             <Route path='/blog'  element={<Blog/>} />
-            <Route path='/blogdetail' element={<BlogDetail/>}/>
+            <Route path='/blog/detail/:id' element={<BlogDetail/>}/>
+
+            <Route path='/register' element={<Register/>}/>
+            <Route path='/login' element={<Login/>}/>
+            <Route path='/account' element={<Account/>}/>
+            {/* <Route path='/index' element={<Index/>}/> */}
         </Routes>
       </App>
     </Router>

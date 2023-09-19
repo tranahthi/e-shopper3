@@ -67,9 +67,6 @@ function Home() {
             <section>
                 <div className="container">
                     <div className="row">
-                        <div className="col-sm-3">
-                            <Sidebar/>
-                        </div>
                         <div className="col-sm-9 padding-right">
                             <div className="features_items">{/*features_items*/}
                                 <h2 className="title text-center">Features Items</h2>

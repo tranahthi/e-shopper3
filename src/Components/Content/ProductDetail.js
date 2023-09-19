@@ -1,15 +1,10 @@
-import Sidebar from "../Layout/Sidebar";
+// import Sidebar from "../Layout/Sidebar";
 
 
 function ProductDetail() {
     return (
-
         <div className="container">
             <div className="row">
-                <div className="col-sm-3">
-                    <Sidebar />
-                </div>
-
                 <div className="col-sm-9 padding-right">
                     <div className="product-details">{/*product-details*/}
                         <div className="col-sm-5">

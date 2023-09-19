@@ -1,10 +1,36 @@
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react"
 
 
 function Header() {
+    // const [isLoadingComplete, setIsLoadingComplete] = useState(false);
+    const [isLogin, setIsLogin] = useState(false)
+    const navigate = useNavigate()
 
+
+    
+    useEffect(() => {
+        //kiểm tra thử đã đăng nhập hay chưa
+        const token = localStorage.getItem("token");
+        if (token) {
+            setIsLogin(true)
+           
+        } else {
+            setIsLogin(false)
+        }
+        // setIsLoadingComplete(true)
+    }, [])
+    console.log(isLogin)
+    function handleLogout() {
+        localStorage.clear()
+        setIsLogin(false)
+        navigate("/login")
+    }
+
+  
     return (
         <div>
-            
+
             <header id="header">{/*header*/}
                 <div className="header_top">{/*header_top*/}
                     <div className="container">
@@ -36,7 +62,7 @@ function Header() {
                         <div className="row">
                             <div className="col-md-4 clearfix">
                                 <div className="logo pull-left">
-                                    <a href="index.html"><img src="images/home/logo.png" alt="" /></a>
+                                    <a href="/"><img src="images/home/logo.png" alt="" /></a>
                                 </div>
                                 <div className="btn-group pull-right clearfix">
                                     <div className="btn-group">
@@ -64,11 +90,24 @@ function Header() {
                             <div className="col-md-8 clearfix">
                                 <div className="shop-menu clearfix pull-right">
                                     <ul className="nav navbar-nav">
-                                        <li><a href><i className="fa fa-user" /> Account</a></li>
+                                        <li><a href="/account"><i className="fa fa-user" /> Account</a></li>
                                         <li><a href><i className="fa fa-star" /> Wishlist</a></li>
                                         <li><a href="checkout.html"><i className="fa fa-crosshairs" /> Checkout</a></li>
                                         <li><a href="/cart"><i className="fa fa-shopping-cart"><sup style={{ color: 'blue', borderRadius: '50%', backgroundColor: 'aqua' }} className="quantity" /></i> Cart</a></li>
-                                        <li><a href="/login"><i className="fa fa-lock" /> Login</a></li>
+                                        <>
+                                            {isLogin ? (
+                                                <li>
+                                                    <button onClick={handleLogout}>logout</button>
+                                                </li>
+                                            ) : (
+                                                <>
+                                                    <li><Link to="/login"><i className="fa fa-lock" /> Login</Link></li>
+                                                    <li><Link to="/register"><i className="fa fa-lock" /> Register</Link></li>
+                                                </>
+                                            )}
+                                        </>
+
+
                                     </ul>
                                 </div>
                             </div>
@@ -102,7 +141,7 @@ function Header() {
                                         <li className="dropdown"><a href="#">Blog<i className="fa fa-angle-down" /></a>
                                             <ul role="menu" className="sub-menu">
                                                 <li><a href="/blog">Blog List</a></li>
-                                                <li><a href="/blogdetail">Blog Single</a></li>
+                                                <li><a href="">Blog Single</a></li>
                                             </ul>
                                         </li>
                                         <li><a href="404.html">404</a></li>
