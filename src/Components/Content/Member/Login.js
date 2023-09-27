@@ -19,9 +19,10 @@ function Login() {
         setInput(state => ({ ...state, [name]: value }))
     }
     // Hàm này sẽ được gọi khi đăng nhập thành công
-    function handleLoginSuccess(token) {
+    function handleLoginSuccess(token,userData) {
         
-        localStorage.setItem("token", token);
+        localStorage.setItem("token", token); // lưuu token này vào local
+        localStorage.setItem("userData" ,JSON.stringify(userData)) //lưu thông tin user vào local
         navigate("/"); // Điều hướng đến trang chủ sau khi đăng nhập
     }
     function handleSubmit(e) {
@@ -50,10 +51,10 @@ function Login() {
                 .then(res => {
                     if (res.data.errors) {
                         setErrors(res.data.errors)
-
-                        console.log(res)
                     } else {
-                        handleLoginSuccess(res.data.token)
+                        handleLoginSuccess(res.data.token,res.data.Auth)
+                        
+                                              
                     }
                 })
                 .catch(error => console.log(error))

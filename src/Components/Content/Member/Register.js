@@ -10,7 +10,7 @@ function Register() {
         phone: "",
         address: "",
         avatar: null,
-        level: 0, 
+        level: 0,
     });
 
     const [errors, setErrors] = useState({});
@@ -23,7 +23,7 @@ function Register() {
             // Kiểm tra kích thước file
             const size = 1024 * 1024; // 1MB
             if (file.size > size) {
-                setErrors({ ...errors, avatar: "Kích thước file phải nhỏ hơn 1MB" });
+                setErrors({ ...errors, file: "Kích thước file phải nhỏ hơn 1MB" });
                 return;
             } else {
                 const infoFile = {
@@ -38,18 +38,19 @@ function Register() {
                 if (!allowedExtensions.includes(fileExtension)) {
                     setErrors({
                         ...errors,
-                        avatar: "Hãy chọn đúng loại file là hình ảnh",
+                        file: "Hãy chọn đúng loại file là hình ảnh",
                     });
                     return;
+                } else {
+                    // Nếu tất cả kiểm tra đều thành công, tiến hành mã hoá file và lưu vào state
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        setAvatar(e.target.result);
+                        setFile(file[0]);
+                        setErrors({ ...errors, file: '' }); // Xóa thông báo lỗi
+                    };
+                    reader.readAsDataURL(file[0]);
                 }
-                // Nếu tất cả kiểm tra đều thành công, tiến hành mã hoá file và lưu vào state
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    setAvatar(e.target.result);
-                    setFile(file);
-                    setErrors({ ...errors, avatar: '' }); // Xóa thông báo lỗi
-                };
-                reader.readAsDataURL(file);
             }
 
 
@@ -67,11 +68,11 @@ function Register() {
 
         // Xử lý bình thường cho các trường khác
         updateDataForm[name] = value;
-        if(name === "email"){
-            if(!isValidEmail(updateDataForm.email)){
-                setErrors({...errors,[name]:"vui lòng nhập đúng định dạng email"})
-            }else{
-                setErrors({...errors,[name]:""})
+        if (name === "email") {
+            if (!isValidEmail(updateDataForm.email)) {
+                setErrors({ ...errors, [name]: "vui lòng nhập đúng định dạng email" })
+            } else {
+                setErrors({ ...errors, [name]: "" })
             }
         }
 
@@ -95,8 +96,8 @@ function Register() {
             errorSubmit.email = "Vui lòng nhập email";
             flag = false;
         }
-        if (getInput. password === "") {
-            errorSubmit. password = "Vui lòng nhập mật khẩu";
+        if (getInput.password === "") {
+            errorSubmit.password = "Vui lòng nhập mật khẩu";
             flag = false;
         }
         if (getInput.phone === "") {
@@ -125,7 +126,7 @@ function Register() {
         const formData = new FormData();
         formData.append("name", getInput.name);
         formData.append("email", getInput.email);
-        formData.append("password", getInput. password);
+        formData.append("password", getInput.password);
         formData.append("phone", getInput.phone);
         formData.append("address", getInput.address);
         formData.append("avatar", avatar); // Đã là file đã được mã hoá
@@ -195,6 +196,7 @@ function Register() {
                                 name="avatar"
                                 onChange={handleUserInputFile}
                             />
+                            {avatar && <img src={avatar} alt="Avatar Preview" style={{ maxWidth: '100px' }} />}
                             <label>Level</label>
                             <input
                                 type="number"

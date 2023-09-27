@@ -4,23 +4,23 @@ import { Link } from "react-router-dom";
 
 
 function Blog() {
+    // const [readMoreClicked, setReadMoreClicked] = useState(false);
     const [getItem, setItem] = useState('')
     useEffect(() => {
         axios.get("http://localhost/laravel8/laravel8/public/api/blog")
             .then(res => {
                 setItem(res.data.blog.data)
-                console.log(res)
-                
+                console.log(res)   
             })
             .catch(function (error) {
                 console.log(error)
             })
 
     }, [])
- 
+
     function renderData() {
         if (Array.isArray(getItem) && getItem.length >0) {
-            console.log(getItem)
+            // console.log(getItem)
             return getItem.map((value, index) => (
                 <div className="single-blog-post" key={index}>
                     <h3>{value.title}</h3>
@@ -44,7 +44,7 @@ function Blog() {
                     <p>{value.description}</p>
                     
                     {/* <a className="btn btn-primary" href="#">Read More</a> */}
-                    <Link to={"/blog/detail/" + value.id}  className="btn btn-primary">Read More </Link>
+                    <Link to={"/blog/detail/" + value.id } className="btn btn-primary">Read More </Link>
                 </div>
             ));
         } 
