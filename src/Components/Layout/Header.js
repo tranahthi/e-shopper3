@@ -97,7 +97,7 @@ function Header() {
                                         <>
                                             {isLogin ? (
                                                 <li>
-                                                    <button onClick={handleLogout}>logout</button>
+                                                    <button style={{border: "none" ,marginTop:"7px",backgroundColor:"#ffff"}} onClick={handleLogout}>Logout</button>
                                                 </li>
                                             ) : (
                                                 <>

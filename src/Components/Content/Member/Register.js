@@ -46,10 +46,10 @@ function Register() {
                     const reader = new FileReader();
                     reader.onload = (e) => {
                         setAvatar(e.target.result);
-                        setFile(file[0]);
+                        setFile(file);
                         setErrors({ ...errors, file: '' }); // Xóa thông báo lỗi
                     };
-                    reader.readAsDataURL(file[0]);
+                    reader.readAsDataURL(file);
                 }
             }
 

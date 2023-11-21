@@ -1,49 +1,38 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import axios from 'axios';
 
 function Comment(props) {
     // const [errors, setErrors] = useState({})
 
-    const { idBlog, addComment,replyToCommentId } = props; //,replyToCommentId
+    const { idBlog, addComment,replyToCommentId } = props; 
     const [comment, setComment] = useState("")
-    // const [addNewComment,setNewComment] = useState([])
-    const [isLogin, setIsLogin] = useState(false) // để kiểm tra người dùng đã đăng nhập hay chưa
+    // để kiểm tra người dùng đã đăng nhập hay chưa
+    const [isLogin, setIsLogin] = useState(false) 
     const [commentError, setCommentError] = useState(false);
     const navigate = useNavigate()
     let token = localStorage.getItem("token")
+
     useEffect(() => {
-        
         if (token) {
             setIsLogin(true)
         } else {
             setIsLogin(false)
         }
-
-        // axios.get("http://localhost/laravel8/laravel8/public/api/blog/comment/"+ idBlog )
-        // .then(res =>{
-        //     console.log(res)
-        //     setNewComment(res.data.data)
-        // })
-        // .then(error => console.log(error))
-    }, []) //idBlog
+    },[token])
   
-
     function handleInput(e) {
         const {  value } = e.target
         setComment(value)
     }
     function handleSubmit(e) {
         e.preventDefault()
-
-
         if (!isLogin) {
             navigate("/login")
-            
         }else if (comment === "") {
-            setCommentError(true); // Đặt biến lỗi thành true
+            // Đặt biến lỗi thành true
+            setCommentError(true); 
             return;
         } else{
             let config = {
@@ -57,6 +46,7 @@ function Comment(props) {
             if(userData){
                 userData = JSON.parse(userData)
             }
+            console.log(userData)
             
             const formData = new FormData()
             formData.append('id_blog', idBlog);
@@ -66,7 +56,7 @@ function Comment(props) {
             formData.append('image_user', userData.avatar);
             formData.append('name_user', userData.name);
 
-           
+           console.log(replyToCommentId)
 
             axios.post("http://localhost/laravel8/laravel8/public/api/blog/comment/"+ idBlog ,formData,config )
             .then(res =>{
@@ -74,12 +64,13 @@ function Comment(props) {
                 setComment("")
 
                 const newComment = {
+                    id_comment: replyToCommentId  || 0 ,
                     name_user: userData.name,
                     comment: comment,
                     created_at: new Date().toLocaleString(),
                 }
-                addComment(newComment) // gọi hàm addcomment được truyền qua props để theem new comment vào post lên api
-                
+               // gọi hàm addcomment được truyền qua props để theem new comment vào post lên api 
+                addComment(newComment) 
                
             })
             .catch(error => console.log(error))
@@ -96,11 +87,11 @@ function Comment(props) {
             <div className="row">
                 <div className="col-sm-9">
                    
-                    <div className="replay-box">
+                    <div className="replay-box"  id="comment-form">
                         <div className="row">
                             <div className="col-sm-12">
                                 <h2>Leave a replay</h2>
-                                <div className="text-area" id="comment-form">
+                                <div className="text-area">
                                     <div className="blank-arrow">
                                         <label>Your Name</label>
                                     </div>

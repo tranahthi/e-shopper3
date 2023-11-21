@@ -9,28 +9,29 @@ import Rate from "./Rate"
 
 
 
+
 function BlogDetail(props) {
   const [getItem, setItem] = useState('')
   const [comments, setComments] = useState([])
-  const [averageRating, setAverageRating] = useState(0)
-  const [totalVotes, setTotalVotes] = useState(0);
+  // const [totalVotes, setTotalVotes] = useState(0);
+  // Thêm state để theo dõi bình luận đang được reply
+  const [replyToCommentId, setReplyToCommentId] = useState(null);
   let { id } = useParams()
-  const [replyToCommentId, setReplyToCommentId] = useState(null); // Thêm state để theo dõi bình luận đang được reply
 
 
   function addComment(newComment) {
-    setComments([newComment, ...comments]) // cập nhật lại state comments,thêm comment mới vào (newcomment) vào mảng comments sử dụgn toán tử ... để sao chép tất cả các phần tử hiện có trong comments sau đó thêm comment mới vào đầu mảng và gán bằng comments 
+    // cập nhật lại state comments,thêm comment mới vào (newcomment) vào mảng comments sử dụgn toán tử ... để sao chép tất cả các phần tử hiện có trong comments sau đó thêm comment mới vào đầu mảng và gán bằng comments 
+    setComments([newComment, ...comments])
     console.log(comments)
   }
   // Hàm xử lý khi nhấn "Reply" trên một bình luận
   const handleReplyClick = (commentId) => {
     setReplyToCommentId(commentId);
-    console.log(commentId)
-    // // Cuộn đến phần trả lời bình luận
-    // // window.scrollTo({
-    // //   top: document.getElementById('comment-form').offsetTop,
-    // //   behavior: 'smooth',
-    // });
+    console.log(commentId);
+    const replayBox = document.getElementById('comment-form');
+    if (replayBox) {
+      replayBox.scrollIntoView({ behavior: 'smooth' });
+    }
   };
   useEffect(() => {
 
@@ -40,13 +41,11 @@ function BlogDetail(props) {
         setComments(res.data.data.comment) // truyền data của comment vào state setComments
         console.log('o1')
       })
-      
-      
       .catch(error => console.log(error))
-      countRate()
+    
   }, [id])
 
- 
+
 
   function renderData() {
     if (getItem !== '') {
@@ -78,32 +77,15 @@ function BlogDetail(props) {
     }
 
   }
-
-  // let userData = localStorage.getItem("userData") //lấy data user từ local xuống để truyền qau component Rate
-  // if (userData) {
-  //   userData = JSON.parse(userData)
-  // }
-  // console.log(userData)
-
-  function countRate() {
-    axios.get(`http://localhost/laravel8/laravel8/public/api/blog/rate/${id}`)
-      .then(res => {
-        const rateData = res.data.data;
-        console.log(rateData)
-
-        if (Object.keys(rateData).length > 0) {
-          const ratings = Object.values(rateData).map((Item) => Item.rate); // item đại diện cho từng đối tượng trong rateData trong mỗi lần lặp
-         
-          //rating: Đây là giá trị của phần tử trong mảng ratings hiện đang được comment.
-          const totalRating = ratings.reduce((acc, rating) => acc + rating, 0); 
-          const average = totalRating / ratings.length;
-          setAverageRating(average);
-          // setTotalVotes(ratings.length);
-        }
-      })
-      .catch(error => console.log(error))
+  //lấy data user từ local xuống để truyền qau component Rate
+  let userData = localStorage.getItem("userData")
+  if (userData) {
+    userData = JSON.parse(userData)
   }
+  console.log(userData)
+
   
+
 
   return (
     <div className="container">
@@ -113,39 +95,21 @@ function BlogDetail(props) {
             <h2 className="title text-center">Latest From our Blog</h2>
             {renderData()}
           </div>{/*/blog-post-area*/}
-          <div className="rating-area">
-            <ul className="ratings">
-              <li className="rate-this">Rate this item:</li>
-              {/* truyền cho rate 2 cái là id blog và id của user*/}
-              {comments.length>0 && (
-                <Rate idBlog={comments[0].id_blog} user_id={comments[0].id_user} /> 
-                )}
-                
-              <li className="color">{averageRating.toFixed(1)} votes</li>
-            </ul>
-            <ul className="tag">
-              <li>TAG:</li>
-              <li><a className="color" href>Pink <span>/</span></a></li>
-              <li><a className="color" href>T-Shirt <span>/</span></a></li>
-              <li><a className="color" href>Girls</a></li>
-            </ul>
-          </div>{/*/rating-area*/}
+          {/* truyền cho rate 2 cái là id blog và id của user*/}
+          <Rate idBlog={getItem.id} user_id={userData.id}  />
           <div className="socials-share">
             <a href><img src="images/blog/socials.png" alt="" /></a>
           </div>
+          {/* truyền comments qua cho ListComment ,addComment={addComment} handleReplyClick={handleReplyClick} replyToCommentId={replyToCommentId}*/}
           <ListComment
             comments={comments}
             addComment={addComment}
             handleReplyClick={handleReplyClick}
-            replyToCommentId={replyToCommentId} /> {/* truyền comments qua cho ListComment ,addComment={addComment} handleReplyClick={handleReplyClick} replyToCommentId={replyToCommentId}*/}
-          <Comment idBlog={getItem.id} addComment={addComment} replyToCommentId={replyToCommentId} /> {/* truyền id của blog và add comment qua cho comment ,replyToCommentId={replyToCommentId} */}
-
-
+            replyToCommentId={replyToCommentId} />
+          {/* truyền id của blog và add comment qua cho comment ,replyToCommentId={replyToCommentId} */}
+          <Comment idBlog={getItem.id} addComment={addComment} replyToCommentId={replyToCommentId} />
         </div>
-
       </div>
-
-
     </div>
   )
 }

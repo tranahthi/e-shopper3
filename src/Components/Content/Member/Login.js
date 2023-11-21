@@ -20,6 +20,7 @@ function Login() {
     }
     // Hàm này sẽ được gọi khi đăng nhập thành công
     function handleLoginSuccess(token,userData) {
+        console.log(userData)
         
         localStorage.setItem("token", token); // lưuu token này vào local
         localStorage.setItem("userData" ,JSON.stringify(userData)) //lưu thông tin user vào local
@@ -49,12 +50,11 @@ function Login() {
 
             axios.post("http://localhost/laravel8/laravel8/public/api/login", data)
                 .then(res => {
+                    console.log(res)
                     if (res.data.errors) {
                         setErrors(res.data.errors)
                     } else {
-                        handleLoginSuccess(res.data.token,res.data.Auth)
-                        
-                                              
+                        handleLoginSuccess(res.data.token,res.data.Auth)                   
                     }
                 })
                 .catch(error => console.log(error))
